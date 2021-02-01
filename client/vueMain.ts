@@ -55,6 +55,8 @@ export async function activate(context: vscode.ExtensionContext) {
       registerCustomClientNotificationHandlers(client);
       registerCustomLSPCommands(context, client);
       registerRestartVLSCommand(context, client);
+
+      registerVueLanguageConfiguration();
     })
     .catch((e: Error) => {
       console.error(e.stack);
@@ -102,4 +104,12 @@ function registerCustomLSPCommands(context: vscode.ExtensionContext, client: Lan
     vscode.commands.registerCommand('vetur.showOutputChannel', () => client.outputChannel.show()),
     vscode.commands.registerCommand('vetur.showDoctorInfo', generateDoctorCommand(client))
   );
+}
+
+function registerVueLanguageConfiguration() {
+  vscode.languages.setLanguageConfiguration('vue', {
+    /* tslint:disable:max-line-length */
+    // adopted from https://github.com/microsoft/vscode/blob/6a1c7a5097d048365ff4fe6335f7f98fde560ea4/extensions/typescript-language-features/src/languageFeatures/languageConfiguration.ts#L20
+    wordPattern: /(-?\d*\.\d\w*)|([^\`\~\!\@\%\^\&\*\(\)\-\=\+\[\{\]\}\\\|\;\:\'\"\,\.\<\>\/\?\s]+)/
+  });
 }
